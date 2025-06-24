@@ -12,8 +12,8 @@ class GeneralAnalysis:
     
     def render(self):
         """Render the general analysis page"""
-        st.title("📊 General Market Analysis")
-        st.markdown("---")
+        st.markdown('<h2 class="section-header">📊 General Market Analysis</h2>', unsafe_allow_html=True)
+        st.markdown('<div class="info-box">Comprehensive market trends, sector analysis, and funding patterns across the Indian startup ecosystem</div>', unsafe_allow_html=True)
         
         # Date range filter
         col1, col2, col3 = st.columns([1, 1, 2])
@@ -71,42 +71,50 @@ class GeneralAnalysis:
     
     def display_summary_cards(self, df):
         """Display summary metrics cards"""
-        st.subheader("📈 Key Metrics")
+        st.markdown('<h3 class="section-header">📈 Key Metrics</h3>', unsafe_allow_html=True)
         
         col1, col2, col3, col4, col5 = st.columns(5)
         
         with col1:
             total_startups = df['startup'].nunique()
-            st.metric(
-                "Total Startups",
-                f"{total_startups:,}",
-                help="Unique startups that received funding"
-            )
+            st.markdown(f"""
+            <div class="metric-card">
+                <h4>🏢 Total Startups</h4>
+                <h2>{total_startups:,}</h2>
+                <small>Unique startups funded</small>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col2:
             total_funding = df['amount'].sum()
-            st.metric(
-                "Total Funding",
-                f"₹{total_funding:,.0f}M",
-                help="Total funding amount raised"
-            )
+            st.markdown(f"""
+            <div class="metric-card">
+                <h4>💰 Total Funding</h4>
+                <h2>₹{total_funding:,.0f}M</h2>
+                <small>Total amount raised</small>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col3:
             avg_funding = df['amount'].mean()
-            st.metric(
-                "Avg Funding",
-                f"₹{avg_funding:.2f}M",
-                help="Average funding per round"
-            )
+            st.markdown(f"""
+            <div class="metric-card">
+                <h4>📊 Avg Funding</h4>
+                <h2>₹{avg_funding:.2f}M</h2>
+                <small>Average per round</small>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col4:
             max_funding = df['amount'].max()
             max_startup = df.loc[df['amount'].idxmax(), 'startup']
-            st.metric(
-                "Largest Round",
-                f"₹{max_funding:,.0f}M",
-                help=f"Largest funding round by {max_startup}"
-            )
+            st.markdown(f"""
+            <div class="metric-card">
+                <h4>🚀 Largest Round</h4>
+                <h2>₹{max_funding:,.0f}M</h2>
+                <small>By {max_startup}</small>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col5:
             total_investors = len(set([
@@ -115,11 +123,13 @@ class GeneralAnalysis:
                 for investor in str(investors_str).split(',')
                 if investor.strip() and investor.strip().lower() != 'unknown'
             ]))
-            st.metric(
-                "Active Investors",
-                f"{total_investors:,}",
-                help="Unique investors in the period"
-            )
+            st.markdown(f"""
+            <div class="metric-card">
+                <h4>💼 Active Investors</h4>
+                <h2>{total_investors:,}</h2>
+                <small>Unique investors</small>
+            </div>
+            """, unsafe_allow_html=True)
     
     def display_mom_analysis(self, df):
         """Display month-over-month analysis"""

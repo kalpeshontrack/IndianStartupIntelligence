@@ -18,6 +18,134 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Custom CSS for enhanced UI
+st.markdown("""
+<style>
+    /* Main dashboard styling */
+    .main > div {
+        padding-top: 2rem;
+    }
+    
+    /* Enhanced sidebar styling */
+    .css-1d391kg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    /* Card styling for metrics */
+    .metric-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-left: 4px solid #FF6B6B;
+        margin: 0.5rem 0;
+    }
+    
+    /* Section headers */
+    .section-header {
+        background: linear-gradient(90deg, #FF6B6B, #4ECDC4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin: 1.5rem 0;
+        padding: 0.5rem 0;
+        border-bottom: 2px solid #f0f2f6;
+    }
+    
+    /* Chart container styling */
+    .chart-container {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin: 1rem 0;
+        border: 1px solid #e8e8e8;
+    }
+    
+    /* Enhanced button styling */
+    .stButton > button {
+        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+    
+    /* Selectbox styling */
+    .stSelectbox > div > div {
+        background: white;
+        border: 2px solid #e8e8e8;
+        border-radius: 10px;
+        transition: border-color 0.3s ease;
+    }
+    
+    .stSelectbox > div > div:focus-within {
+        border-color: #FF6B6B;
+        box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+    }
+    
+    /* Info boxes */
+    .info-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-left: 4px solid #4ECDC4;
+    }
+    
+    /* Table styling */
+    .dataframe {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Navigation active state */
+    .nav-active {
+        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        color: white;
+        padding: 0.5rem;
+        border-radius: 5px;
+        margin: 0.2rem 0;
+    }
+    
+    /* Dashboard title styling */
+    .dashboard-title {
+        text-align: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 3rem;
+        font-weight: bold;
+        margin: 1rem 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* Improved spacing */
+    .element-container {
+        margin: 0.5rem 0;
+    }
+    
+    /* Footer styling */
+    .footer {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+        border-top: 1px solid #e8e8e8;
+        margin-top: 3rem;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 @st.cache_data
 def load_data():
     """Load and cache the startup funding data"""
@@ -35,6 +163,10 @@ def load_data():
 def main():
     """Main application function"""
     
+    # Add dashboard title with enhanced styling
+    st.markdown('<h1 class="dashboard-title">🚀 Indian Startup Funding Dashboard</h1>', unsafe_allow_html=True)
+    st.markdown('<div class="info-box">Comprehensive analysis of Indian startup ecosystem with interactive visualizations and insights</div>', unsafe_allow_html=True)
+    
     # Load data
     df = load_data()
     if df is None:
@@ -44,34 +176,83 @@ def main():
     data_processor = DataProcessor(df)
     processed_df = data_processor.process_data()
     
-    # Sidebar navigation
-    st.sidebar.title("🚀 Indian Startup Funding Dashboard")
+    # Enhanced sidebar navigation
+    st.sidebar.markdown("## 🚀 Navigation")
     st.sidebar.markdown("---")
     
-    # Navigation menu
+    # Navigation menu with enhanced styling
     page = st.sidebar.selectbox(
-        "Choose Analysis Type",
-        ["🏢 Startup Analysis", "💼 Investor Analysis", "📊 General Analysis"]
+        "📊 Choose Analysis Type",
+        ["🏢 Startup Analysis", "💼 Investor Analysis", "📊 General Analysis"],
+        help="Select the type of analysis you want to explore"
     )
     
-    # Display current dataset info
+    # Enhanced dataset info section
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### Dataset Info")
-    st.sidebar.write(f"**Total Records:** {len(processed_df):,}")
-    st.sidebar.write(f"**Date Range:** {processed_df['date'].min().strftime('%Y-%m-%d')} to {processed_df['date'].max().strftime('%Y-%m-%d')}")
-    st.sidebar.write(f"**Unique Companies:** {processed_df['startup'].nunique():,}")
-    st.sidebar.write(f"**Unique Investors:** {processed_df['investors'].nunique():,}")
+    st.sidebar.markdown("## 📈 Dataset Overview")
     
-    # Route to appropriate page
+    # Create info cards in sidebar
+    st.sidebar.markdown(f"""
+    <div class="metric-card">
+        <h4>📊 Total Records</h4>
+        <h2>{len(processed_df):,}</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.sidebar.markdown(f"""
+    <div class="metric-card">
+        <h4>🏢 Unique Startups</h4>
+        <h2>{processed_df['startup'].nunique():,}</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.sidebar.markdown(f"""
+    <div class="metric-card">
+        <h4>💼 Active Investors</h4>
+        <h2>{processed_df['investors'].nunique():,}</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.sidebar.markdown(f"""
+    <div class="info-box">
+        <strong>📅 Date Range:</strong><br>
+        {processed_df['date'].min().strftime('%B %d, %Y')} to<br>
+        {processed_df['date'].max().strftime('%B %d, %Y')}
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Add feature highlights
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("## ✨ Features")
+    st.sidebar.markdown("""
+    • **Startup Analysis**: Detailed company profiles and funding history
+    • **Investor Insights**: Investment patterns and portfolio analysis  
+    • **Market Trends**: Sector analysis and funding heatmaps
+    • **Interactive Charts**: Dynamic visualizations with filters
+    """)
+    
+    # Route to appropriate page with enhanced containers
     if page == "🏢 Startup Analysis":
-        company_analysis = CompanyAnalysis(processed_df)
-        company_analysis.render()
+        with st.container():
+            company_analysis = CompanyAnalysis(processed_df)
+            company_analysis.render()
     elif page == "💼 Investor Analysis":
-        investor_analysis = InvestorAnalysis(processed_df)
-        investor_analysis.render()
+        with st.container():
+            investor_analysis = InvestorAnalysis(processed_df)
+            investor_analysis.render()
     elif page == "📊 General Analysis":
-        general_analysis = GeneralAnalysis(processed_df)
-        general_analysis.render()
+        with st.container():
+            general_analysis = GeneralAnalysis(processed_df)
+            general_analysis.render()
+    
+    # Add footer
+    st.markdown("---")
+    st.markdown("""
+    <div class="footer">
+        <p>🚀 Indian Startup Funding Dashboard | Built with Streamlit & Plotly</p>
+        <p>Data-driven insights for the Indian startup ecosystem</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()

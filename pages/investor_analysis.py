@@ -12,8 +12,8 @@ class InvestorAnalysis:
     
     def render(self):
         """Render the investor analysis page"""
-        st.title("💼 Investor Analysis")
-        st.markdown("---")
+        st.markdown('<h2 class="section-header">💼 Investor Analysis</h2>', unsafe_allow_html=True)
+        st.markdown('<div class="info-box">Deep dive into investor behavior, portfolio analysis, and investment patterns across the Indian startup ecosystem</div>', unsafe_allow_html=True)
         
         # Get unique investors
         all_investors = set()
@@ -26,18 +26,24 @@ class InvestorAnalysis:
         
         investors_list = sorted(list(all_investors))
         
-        # Investor search and selection
-        col1, col2 = st.columns([2, 1])
+        # Enhanced investor search section
+        st.markdown("### 🔍 Investor Search")
+        col1, col2 = st.columns([3, 1])
         
         with col1:
             selected_investor = st.selectbox(
-                "Search and Select Investor",
+                "🔍 Search and Select Investor",
                 options=[""] + investors_list,
-                help="Type to search for an investor"
+                help="Type to search for an investor and explore their portfolio"
             )
         
         with col2:
-            st.metric("Total Investors", f"{len(investors_list):,}")
+            st.markdown(f"""
+            <div class="metric-card">
+                <h4>💼 Total Investors</h4>
+                <h2>{len(investors_list):,}</h2>
+            </div>
+            """, unsafe_allow_html=True)
         
         if selected_investor:
             self.display_investor_details(selected_investor)
