@@ -4,6 +4,7 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from utils.visualizations import Visualizations
+from utils.chart_exporter import ChartExporter
 
 class GeneralAnalysis:
     def __init__(self, df):
@@ -68,6 +69,11 @@ class GeneralAnalysis:
         
         # Funding heatmap
         self.display_funding_heatmap(filtered_df)
+        
+        # Export section
+        st.markdown("---")
+        chart_exporter = ChartExporter(filtered_df)
+        chart_exporter.export_all_charts_section()
     
     def display_summary_cards(self, df):
         """Display summary metrics cards"""

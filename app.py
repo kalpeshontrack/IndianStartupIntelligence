@@ -6,6 +6,7 @@ import os
 
 # Import custom modules
 from utils.data_processor import DataProcessor
+from utils.pdf_generator import PDFReportGenerator
 from pages.company_analysis import CompanyAnalysis
 from pages.investor_analysis import InvestorAnalysis
 from pages.general_analysis import GeneralAnalysis
@@ -229,6 +230,45 @@ def main():
     • **Investor Insights**: Investment patterns and portfolio analysis  
     • **Market Trends**: Sector analysis and funding heatmaps
     • **Interactive Charts**: Dynamic visualizations with filters
+    """)
+    
+    # PDF Report Generation
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("## 📄 Export Reports")
+    if st.sidebar.button("📥 Generate PDF Report", help="Download comprehensive insights as PDF"):
+        try:
+            with st.spinner("Generating PDF report..."):
+                pdf_generator = PDFReportGenerator(processed_df, data_processor)
+                filename = pdf_generator.generate_pdf_report()
+                
+                # Read the PDF file
+                with open(filename, "rb") as pdf_file:
+                    pdf_bytes = pdf_file.read()
+                
+                st.sidebar.download_button(
+                    label="📄 Download PDF Report",
+                    data=pdf_bytes,
+                    file_name=f"startup_funding_report_{datetime.now().strftime('%Y%m%d')}.pdf",
+                    mime="application/pdf"
+                )
+                st.sidebar.success("PDF report generated successfully!")
+                
+                # Clean up temporary file
+                import os
+                if os.path.exists(filename):
+                    os.remove(filename)
+                    
+        except Exception as e:
+            st.sidebar.error(f"Error generating PDF: {str(e)}")
+    
+    st.sidebar.markdown("""
+    **PDF Report includes:**
+    • Executive summary with key metrics
+    • Market overview with sector analysis
+    • Top performing startups ranking
+    • Geographic distribution analysis
+    • Investor landscape insights
+    • Funding rounds breakdown
     """)
     
     # Route to appropriate page with enhanced containers
