@@ -51,7 +51,7 @@ def main():
     # Navigation menu
     page = st.sidebar.selectbox(
         "Choose Analysis Type",
-        ["🏢 Company Analysis", "💼 Investor Analysis", "📊 General Analysis"]
+        ["🏢 Startup Analysis", "💼 Investor Analysis", "📊 General Analysis"]
     )
     
     # Display current dataset info
@@ -63,7 +63,7 @@ def main():
     st.sidebar.write(f"**Unique Investors:** {processed_df['investors'].nunique():,}")
     
     # Route to appropriate page
-    if page == "🏢 Company Analysis":
+    if page == "🏢 Startup Analysis":
         company_analysis = CompanyAnalysis(processed_df)
         company_analysis.render()
     elif page == "💼 Investor Analysis":

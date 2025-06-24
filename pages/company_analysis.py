@@ -12,7 +12,7 @@ class CompanyAnalysis:
     
     def render(self):
         """Render the company analysis page"""
-        st.title("🏢 Company Analysis")
+        st.title("🏢 Startup Analysis")
         st.markdown("---")
         
         # Company search and selection
@@ -22,14 +22,14 @@ class CompanyAnalysis:
             # Get unique companies
             companies = sorted(self.df['startup'].unique())
             selected_company = st.selectbox(
-                "Search and Select Company",
+                "Search and Select Startup",
                 options=[""] + companies,
-                help="Type to search for a company"
+                help="Type to search for a startup"
             )
         
         with col2:
             # Quick stats
-            st.metric("Total Companies", f"{self.df['startup'].nunique():,}")
+            st.metric("Total Startups", f"{self.df['startup'].nunique():,}")
         
         if selected_company:
             self.display_company_details(selected_company)
@@ -41,7 +41,7 @@ class CompanyAnalysis:
         company_info = self.data_processor.get_company_info(self.df, company_name)
         
         if not company_info:
-            st.error("Company not found in the dataset.")
+            st.error("Startup not found in the dataset.")
             return
         
         # Company header
@@ -147,7 +147,7 @@ class CompanyAnalysis:
         st.markdown("---")
         
         # Similar companies
-        st.subheader("🔍 Similar Companies")
+        st.subheader("🔍 Similar Startups")
         similar_companies = self.data_processor.find_similar_companies(self.df, company_name)
         
         if similar_companies:
@@ -158,7 +158,7 @@ class CompanyAnalysis:
             st.dataframe(
                 similar_df[['startup', 'vertical', 'city', 'amount', 'date']],
                 column_config={
-                    "startup": "Company",
+                    "startup": "Startup",
                     "vertical": "Industry",
                     "city": "Location",
                     "amount": "Total Funding",
@@ -167,18 +167,18 @@ class CompanyAnalysis:
                 use_container_width=True
             )
         else:
-            st.info("No similar companies found based on industry, sub-industry, or location.")
+            st.info("No similar startups found based on industry, sub-industry, or location.")
     
     def display_company_overview(self):
         """Display overview of all companies"""
-        st.subheader("📈 Company Overview")
+        st.subheader("📈 Startup Overview")
         
         # Top metrics
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
             total_companies = self.df['startup'].nunique()
-            st.metric("Total Companies", f"{total_companies:,}")
+            st.metric("Total Startups", f"{total_companies:,}")
         
         with col2:
             total_funding = self.df['amount'].sum()
@@ -204,7 +204,7 @@ class CompanyAnalysis:
                 pd.DataFrame({'industry': industry_counts.index, 'count': industry_counts.values}),
                 values='count',
                 names='industry',
-                title="Top 10 Industries by Company Count"
+                title="Top 10 Industries by Startup Count"
             )
             st.plotly_chart(fig, use_container_width=True)
         
@@ -229,7 +229,7 @@ class CompanyAnalysis:
                 pd.DataFrame({'city': city_counts.index, 'count': city_counts.values}),
                 x='city',
                 y='count',
-                title="Top 10 Cities by Company Count"
+                title="Top 10 Cities by Startup Count"
             )
             st.plotly_chart(fig, use_container_width=True)
         
@@ -245,7 +245,7 @@ class CompanyAnalysis:
             st.plotly_chart(fig, use_container_width=True)
         
         # Top funded companies
-        st.subheader("🏆 Top Funded Companies")
+        st.subheader("🏆 Top Funded Startups")
         top_companies = self.df.groupby('startup').agg({
             'amount': 'sum',
             'vertical': 'first',
@@ -260,7 +260,7 @@ class CompanyAnalysis:
         st.dataframe(
             top_companies[['startup', 'vertical', 'city', 'amount', 'date']],
             column_config={
-                "startup": "Company",
+                "startup": "Startup",
                 "vertical": "Industry",
                 "city": "Location",
                 "amount": "Total Funding",

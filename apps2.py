@@ -338,7 +338,7 @@ def display_company_details(df, company_name, data_processor, viz):
     company_info = data_processor.get_company_info(df, company_name)
     
     if not company_info:
-        st.error("Company not found in the dataset.")
+        st.error("Startup not found in the dataset.")
         return
     
     # Company header
@@ -416,7 +416,7 @@ def display_company_details(df, company_name, data_processor, viz):
     st.markdown("---")
     
     # Similar companies
-    st.subheader("🔍 Similar Companies")
+    st.subheader("🔍 Similar Startups")
     similar_companies = data_processor.find_similar_companies(df, company_name)
     
     if similar_companies:
@@ -427,7 +427,7 @@ def display_company_details(df, company_name, data_processor, viz):
         st.dataframe(
             similar_df[['startup', 'vertical', 'city', 'amount', 'date']],
             column_config={
-                "startup": "Company",
+                "startup": "Startup",
                 "vertical": "Industry",
                 "city": "Location",
                 "amount": "Total Funding",
@@ -436,18 +436,18 @@ def display_company_details(df, company_name, data_processor, viz):
             use_container_width=True
         )
     else:
-        st.info("No similar companies found based on industry, sub-industry, or location.")
+        st.info("No similar startups found based on industry, sub-industry, or location.")
 
 def display_company_overview(df, viz):
     """Display overview of all companies"""
-    st.subheader("📈 Company Overview")
+    st.subheader("📈 Startup Overview")
     
     # Top metrics
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         total_companies = df['startup'].nunique()
-        st.metric("Total Companies", f"{total_companies:,}")
+        st.metric("Total Startups", f"{total_companies:,}")
     
     with col2:
         total_funding = df['amount'].sum()
@@ -473,7 +473,7 @@ def display_company_overview(df, viz):
             pd.DataFrame({'industry': industry_counts.index, 'count': industry_counts.values}),
             values='count',
             names='industry',
-            title="Top 10 Industries by Company Count"
+            title="Top 10 Industries by Startup Count"
         )
         st.plotly_chart(fig, use_container_width=True)
     
@@ -498,7 +498,7 @@ def display_company_overview(df, viz):
             pd.DataFrame({'city': city_counts.index, 'count': city_counts.values}),
             x='city',
             y='count',
-            title="Top 10 Cities by Company Count"
+            title="Top 10 Cities by Startup Count"
         )
         st.plotly_chart(fig, use_container_width=True)
     
@@ -514,7 +514,7 @@ def display_company_overview(df, viz):
         st.plotly_chart(fig, use_container_width=True)
     
     # Top funded companies
-    st.subheader("🏆 Top Funded Companies")
+    st.subheader("🏆 Top Funded Startups")
     top_companies = df.groupby('startup').agg({
         'amount': 'sum',
         'vertical': 'first',
@@ -529,7 +529,7 @@ def display_company_overview(df, viz):
     st.dataframe(
         top_companies[['startup', 'vertical', 'city', 'amount', 'date']],
         column_config={
-            "startup": "Company",
+            "startup": "Startup",
             "vertical": "Industry",
             "city": "Location",
             "amount": "Total Funding",
@@ -1279,7 +1279,7 @@ def main():
     # Navigation menu
     page = st.sidebar.selectbox(
         "Choose Analysis Type",
-        ["🏢 Company Analysis", "💼 Investor Analysis", "📊 General Analysis"]
+        ["🏢 Startup Analysis", "💼 Investor Analysis", "📊 General Analysis"]
     )
     
     # Display current dataset info
@@ -1291,8 +1291,8 @@ def main():
     st.sidebar.write(f"**Unique Investors:** {processed_df['investors'].nunique():,}")
     
     # Route to appropriate page
-    if page == "🏢 Company Analysis":
-        st.title("🏢 Company Analysis")
+    if page == "🏢 Startup Analysis":
+        st.title("🏢 Startup Analysis")
         st.markdown("---")
         
         # Company search and selection
@@ -1302,14 +1302,14 @@ def main():
             # Get unique companies
             companies = sorted(processed_df['startup'].unique())
             selected_company = st.selectbox(
-                "Search and Select Company",
+                "Search and Select Startup",
                 options=[""] + companies,
-                help="Type to search for a company"
+                help="Type to search for a startup"
             )
         
         with col2:
             # Quick stats
-            st.metric("Total Companies", f"{processed_df['startup'].nunique():,}")
+            st.metric("Total Startups", f"{processed_df['startup'].nunique():,}")
         
         if selected_company:
             display_company_details(processed_df, selected_company, data_processor, viz)
